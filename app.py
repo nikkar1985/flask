@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
     tora = datetime.datetime.now()
     ora_format = tora.strftime("%H:%M:$S")
-    return f"<h1> Η ώρα είναι {ora_forman}</h1>"
+    return f"<h1> Η ώρα είναι {ora_format}</h1>"
 
 if __name__ == "__main__":
     app.run(debug=True)
