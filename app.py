@@ -1,19 +1,13 @@
 from flask import Flask
-import random
+import datetime
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    messages = [
-               "Μήνυμα νο 1",
-               "Μήνυμα νο 2",
-               "Μήνυμα νο 3",
-               "Μήνυμα νο 4",
-               "Μήνυμα νο 5"
-               ]
-    mes=random.choice(messages)
-    return f"<h1> Το τυχερό μήνυμα είναι το  </h1> <p> {mes} </p>"
+    tora = datetime.datetime.now()
+    ora_format = tora.strftime("%H:%M:$S")
+    return f"<h1> Η ώρα είναι {ora_forman}</h1>"
 
 if __name__ == "__main__":
     app.run(debug=True)
