@@ -13,7 +13,7 @@ def profile(onoma,epaggelma):
         <div style="border: 5px solid darkblue; padding: 20px; border-radius: 15px; text-align:center; font-family:sans-serif;">   
         <h1 style="color:darkblue">Προφίλ </h1>
         <p style="font-size:24px;"> <b>Όνομα </b> {onoma}</p>
-        <p style="font-size:20px; color:gray;> <b> Επάγγελμα </b> {epaggelma}
+        <p style="font-size:20px; color:gray;"> <b> Επάγγελμα </b> {epaggelma} </p>
     '''
 
 if __name__ == "__main__":
