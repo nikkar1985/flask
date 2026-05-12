@@ -4,15 +4,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Γράψε τους αριθμούς τέλος του URL με καθετο , π.χ. /5/4"
+    return " Φτιάξε το προφίλ σου. Γράψε στο τέλος του URL με καθετο /Ονομα/Επάγγελμα"
 
-@app.route('/<int:n1>/<int:n2>')
-def sum(n1,n2):
-    apotelesma = n1+n2
+@app.route('/<onoma>/<epaggelma>')
+def profile(onoma,epaggelma):
     
     return f'''
-        <h1> Υπολογισμός {n1} + {n2} </h1>
-        <p><b>Το αποτέλεσμα είμαι </b>  {apotelesma}</p>    
+        <div style="border: 5px solid darkblue; padding: 20px; border-radius: 15px; text-align:center; font-family:sans-serif;">   
+        <h1 style="color:darkblue">Προφίλ </h1>
+        <p style="font-size:24px> <b>Όνομα </b> {onoma}</p>
+        <p style="font-size:20px; color:gray;> <b> Επάγγελμα </b> {epaggelma}
     '''
 
 if __name__ == "__main__":
