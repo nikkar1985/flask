@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    tautotita = requests.headers.get('User-Agent')
+    tautotita = request.headers.get('User-Agent')
     
             
     return f'''
