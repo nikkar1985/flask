@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask , request
 import random
 
 
@@ -7,18 +7,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    chromata = [
-        "LightBlue", 
-        "LightGreen",
-        "LightCoral",
-        "Gold",
-        "Lavender"
-                ]
-    tixaio_chroma = random.choice(chromata)
+    tautotita = requests.headers.get('User-Agent')
+    
             
     return f'''
-        <body style="background-color: {tixaio_chroma}; text-align: center; padding-top: 50px;">
-        <h1> Το χρώμα που κληρώθηκε είναι το : {tixaio_chroma}</h1>
+        <h1> Ξέρουμε τη συσκευή σου </h1>
+        <p> Η συσκευή σου είναι <b> {tautotita} </b> </p>
+        <hr>
+        <p>Μπείτε και από κινητό να δείτε ότι όντως δουλεύει και θα σας δείξει διαφορετικό αποτέλεσμα από ότι στον υπολογιστή </p>
         </body>
         '''
 
