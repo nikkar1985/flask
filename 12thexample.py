@@ -8,7 +8,7 @@ def home():
 
 @app.route('/<int:ilikia>')
 def check_access(ilikia):
-    # Εδώ η Python παίρνει μια απόφαση
+   
     if ilikia >= 18:
         minima = "Είστε ενήλικας. Πρόσβαση επιτρεπτή!"
         chroma = "green"
