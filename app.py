@@ -4,21 +4,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Γράψε την ηλικία σου στο τέλος, π.χ. /20 ή /15"
+    return "Γράψε το ποσό σε euro στο τέλος του URL"
 
-@app.route('/<int:ilikia>')
+@app.route('/<float:poso>')
 def check_access(ilikia):
-    # Εδώ η Python παίρνει μια απόφαση
-    if ilikia >= 18:
-        minima = "Είστε ενήλικας. Πρόσβαση επιτρεπτή!"
-        chroma = "green"
-    else:
-        minima = "Είσαι ανήλικος. Πρόσβαση μόνο με γονέα!"
-        chroma = "red"
+    dollaria = 1.17 * poso
+    lires = 0.85 * poso
+   
     
     return f'''
-        <h1 style="color: {chroma};">{minima}</h1>
-        <p>Δήλωσες ηλικία: {ilikia} ετών.</p>
+        <h1 >Μετατροπή για {poso}</h1>
+        <p>Σε δολλάρια {dollaria:.2f} </p>
+        <p> Σε λίρες {lires:.2f} </p>
     '''
 
 if __name__ == "__main__":
