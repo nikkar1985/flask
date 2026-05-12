@@ -1,15 +1,26 @@
 from flask import Flask
+import random
 
 
 app = Flask(__name__)
 
-metritis = 0 
 
 @app.route('/')
 def home():
-    global metritis
-    metritis = metritis + 1 
-    return f"<h1> Είσαι  ο επισκέπτης νο {metritis}</h1>"
+    chromata = [
+        "LightBlue", 
+        "LightGreen",
+        "LightCoral",
+        "Gold",
+        "Lavender"
+                ]
+    tixaio_chroma = random.choice(chromata)
+            
+    return f'''
+        <body style="background-color: {tixaio_chroma}; text-align: center; padding-top: 50px;">
+        <h1> Το χρώμα που κληρώθηκε είναι το : {tixaio_chroma}</h1>
+        </body>
+        '''
 
 if __name__ == "__main__":
     app.run(debug=True)
