@@ -12,10 +12,10 @@ def home():
 
 @app.route('</onoma>')
 def greet(onoma):        
-    return f '''
+    return f'''
                <h1> Γειά σου {onoma} </h1>
                <p> Άλλαξε το όνομα στο Url και κοίτα τι θα συμβεί </p>
-              ''' 
+            ''' 
 
 
 
