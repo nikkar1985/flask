@@ -1,13 +1,15 @@
 from flask import Flask
-import datetime
+
 
 app = Flask(__name__)
 
+metritis = 0 
+
 @app.route('/')
 def home():
-    tora = datetime.datetime.now()
-    ora_format = tora.strftime("%H:%M:%S")
-    return f"<h1> Η ώρα είναι {ora_format}</h1>"
+    global metritis
+    metritis = metritis + 1 
+    return f"<h1> Είσαι  ο επισκέπτης νο {metritis}</h1>"
 
 if __name__ == "__main__":
     app.run(debug=True)
