@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return "Γράψε την ηλικία σου στο τέλος του Url πχ 20"
 
-@app.route('/<int:ilikia>')
+@app.route('/<ilikia>')
 def show_age(ilikia):
     return f'''
         <h1>Είσαι {ilikia} χρονών</h1>
