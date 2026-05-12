@@ -1,23 +1,18 @@
-from flask import Flask 
-
-
+from flask import Flask
 
 app = Flask(__name__)
 
-
 @app.route('/')
-def home():        
-    return "Πρόσθεσε το όνομά σου στο τέλος του URL " 
+def home():
+    return "Πρόσθεσε το όνομά σου στο τέλος του URL!"
 
-
-@app.route('</onoma>')
-def greet(onoma):        
+@app.route('/<onoma>')
+def greet(onoma):
     return f'''
-               <h1> Γειά σου {onoma} </h1>
-               <p> Άλλαξε το όνομα στο Url και κοίτα τι θα συμβεί </p>
-            ''' 
-
-
+        <h1>Γεια σου, {onoma}!</h1>
+        <p>Αυτή η σελίδα δημιουργήθηκε ειδικά για σένα.</p>
+        <p>Δοκίμασε να αλλάξεις το όνομα στη διεύθυνση πάνω!</p>
+    '''
 
 if __name__ == "__main__":
     app.run(debug=True)
