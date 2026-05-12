@@ -4,14 +4,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Πρόσθεσε το όνομά σου στο τέλος του URL!"
+    return "Γράψε το έτος γέννησης στο τελος του URL πχ 2000"
 
-@app.route('/<onoma>')
-def greet(onoma):
+@app.route('/<int:etos>')
+def calculate_age(etos):
+    ilikia = 2026 - etos 
     return f'''
-        <h1>Γεια σου, {onoma}!</h1>
-        <p>Αυτή η σελίδα δημιουργήθηκε ειδικά για σένα.</p>
-        <p>Δοκίμασε να αλλάξεις το όνομα στη διεύθυνση πάνω!</p>
+        <h1>Είσαι {ilikia} χρονών</h1>
+        <p>Γεννήθηκες το {etos} έτος</p>
+        <p>Δοκίμασε να αλλάξεις την ηλικία στη διεύθυνση πάνω!</p>
     '''
 
 if __name__ == "__main__":
