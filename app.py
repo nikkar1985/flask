@@ -4,20 +4,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Γράψε μια λέξη στο τέλος του URL, π.χ. /python"
+    return "Γράψε τους αριθμούς τέλος του URL με καθετο , π.χ. /5/4"
 
-@app.route('/<keimeno>')
-def transform_text(keimeno):
-    kefalaia = keimeno.upper();
-    mikra = keimeno.lower();
-    mikos = len(keimeno)
+@app.route('/<int:n1>/<int:n2>')
+def multiplay(n1,n2):
+    apotelesma = n1*n2
     
     return f'''
-        <h1>Ανάλυση για {keimeno} </h1>
-        <p><b>Σε Κεφαλαία</b>  {kefalaia}</p>
-        <p><b>Σε μικρά:</b> {mikra}</p>
-        <p> <b> Αριθμός γραμμάτων : </b> {mikos}</p>
-        
+        <h1> Υπολογισμός {n1} x {n2} </h1>
+        <p><b>Το αποτέλεσμα είμαι </b>  {apotelesma}</p>    
     '''
 
 if __name__ == "__main__":
