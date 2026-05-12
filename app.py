@@ -13,7 +13,7 @@ def transform_text(keimeno):
     mikos = len(keimeno)
     
     return f'''
-        <h1>Ανάλυση για {keimeno} €</h1>
+        <h1>Ανάλυση για {keimeno} </h1>
         <p><b>Σε Κεφαλαία</b>  {kefalaia}</p>
         <p><b>Σε μικρά:</b> {mikra}</p>
         <p> <b> Αριθμός γραμμάτων : </b> {mikos}</p>
