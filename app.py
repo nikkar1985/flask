@@ -1,5 +1,5 @@
 from flask import Flask , request
-import random
+
 
 
 app = Flask(__name__)
@@ -7,14 +7,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    tautotita = request.headers.get('User-Agent')
+    glossa = request.headers.get('Accept-Language')
+
+    if 'el' in glossa.lower():
+        minima = "Γειά σου" 
+    else:
+        minima= "Hi"
+
     
             
     return f'''
-        <h1> Ξέρουμε τη συσκευή σου </h1>
-        <p> Η συσκευή σου είναι <b> {tautotita} </b> </p>
-        <hr>
-        <p>Μπείτε και από κινητό να δείτε ότι όντως δουλεύει και θα σας δείξει διαφορετικό αποτέλεσμα από ότι στον υπολογιστή </p>
+        <h1> {minima}</h1>
+        <p> Η γλώσσα του browser είναι {glossa}</p>
         </body>
         '''
 
