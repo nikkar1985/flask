@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stats Dashboard</title>
+    <style>
+        :root {
+            --primary-blue: #2980b9;
+            --primary-orange: #e67e22;
+            --success-green: #2ecc71;
+            --bg-light: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Το background-color θα αλλάζει αν το progress είναι 100% */
+            background-color: {{ '#f1c40f' if progress >= 100 else '#f4f7f6' }};
+            transition: background-color 1s ease;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        h1 { color: #333; margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 0.9em; margin-bottom: 25px; }
+
+        /* Progress Bar Styling */
+        .progress-container {
+            background: #eee;
+            border-radius: 10px;
+            height: 15px;
+            width: 100%;
+            margin: 20px 0 10px 0;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .progress-bar {
+            background: var(--success-green);
+            height: 100%;
+            width: {{ progress }}%;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .goal-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .stat-item {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            background: #fafafa;
+            border: 1px solid #eee;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-like { background-color: var(--primary-blue); }
+        .btn-coffee { background-color: var(--primary-orange); }
+
+        .footer {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .reset-link {
+            color: #e74c3c;
+            font-size: 0.75em;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+
+        .reset-link:hover { opacity: 1; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>📊 Dashboard</h1>
+        <p class="subtitle">Live Stats Project</p>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <p class="goal-text">Στόχος: <strong>{{ likes }}</strong> / {{ goal }} Likes</p>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-value">{{ likes }}</span>
+                <a href="/action/likes" class="btn btn-like">Like 👍</a>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ coffee }}</span>
+                <a href="/action/coffee_cups" class="btn btn-coffee">Coffee ☕</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 0.9em;">Συνολικές ενέργειες: <strong>{{ likes + coffee }}</strong></p>
+            <a href="/reset" class="reset-link">Επαναφορά όλων των δεδομένων</a>
+        </div>
+    </div>
+
+</body>
+</html>
