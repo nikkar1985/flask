@@ -1,55 +1,53 @@
-from flask import Flask, request
+from flask import Flask, request, abort
 
 app = Flask(__name__)
 
-# Μια πιο γεμάτη "βάση" για να έχει νόημα το φίλτρο
-USERS = [
-    {"name": "nikos", "job": "developer", "color": "#3498db"},
-    {"name": "maria", "job": "designer", "color": "#e74c3c"},
-    {"name": "eleni", "job": "developer", "color": "#2ecc71"},
-    {"name": "kostas", "job": "manager", "color": "#f1c40f"},
-]
+# "Βάση" με κρυφά στοιχεία (emails)
+USERS = {
+    "nikos": {"job": "Developer", "email": "nikos@example.com"},
+    "maria": {"job": "Designer", "email": "maria@example.com"}
+}
+
+ADMIN_PASSWORD = "secret123"  # Ο "κωδικός" μας
 
 @app.route('/')
 def home():
-    # Παίρνουμε το φίλτρο από το URL, π.χ. /?job=developer
-    job_filter = request.args.get('job')
-   
-    # Φιλτράρουμε τη λίστα αν υπάρχει το filter, αλλιώς τους δείχνουμε όλους
-    if job_filter:
-        filtered_users = [u for u in USERS if u['job'] == job_filter.lower()]
-        title = f"Μέλη με επάγγελμα: {job_filter}"
-    else:
-        filtered_users = USERS
-        title = "Όλα τα Μέλη"
-
-    # Δημιουργία των links
-    user_html = ""
-    for u in filtered_users:
-        user_html += f'''
-            <div style="border-left: 5px solid {u['color']}; margin: 10px; padding: 10px; background: #f4f4f4;">
-                <strong>{u['name'].capitalize()}</strong> - {u['job']}
-                <a href="/user/{u['name']}">Προφίλ</a>
-            </div>
-        '''
-
-    return f'''
-    <div style="font-family:sans-serif; max-width:600px; margin:auto;">
-        <h1>{title}</h1>
-        <p>Φιλτράρισμα:
-            <a href="/">Όλοι</a> |
-            <a href="/?job=developer">Developers</a> |
-            <a href="/?job=designer">Designers</a>
-        </p>
-        <hr>
-        {user_html if user_html else "<p>Δεν βρέθηκαν μέλη.</p>"}
-    </div>
+    return '''
+        <h1>Καλωσήρθατε!</h1>
+        <p><a href="/admin?key=secret123">Είσοδος Admin (με κωδικό)</a></p>
+        <p><a href="/admin">Είσοδος Admin (χωρίς κωδικό - Error)</a></p>
     '''
 
-@app.route('/user/<username>')
-def profile(username):
-    # Απλό προφίλ για το παράδειγμα
-    return f"<h1>Προφίλ του χρήστη: {username}</h1><a href='/'>Πίσω</a>"
+@app.route('/admin')
+def admin_panel():
+    # Παίρνουμε το 'key' από το URL: /admin?key=...
+    user_key = request.args.get('key')
+    
+    if user_key == ADMIN_PASSWORD:
+        # Αν ο κωδικός είναι σωστός, χτίζουμε τον πίνακα των emails
+        rows = "".join([f"<tr><td>{name}</td><td>{info['email']}</td></tr>" for name, info in USERS.items()])
+        
+        return f'''
+            <div style="font-family:sans-serif; padding:20px; border:5px solid red;">
+                <h1 style="color:red;">Admin Dashboard</h1>
+                <p>Είσαι συνδεδεμένος ως Διαχειριστής.</p>
+                <table border="1" style="width:100%; text-align:left;">
+                    <tr style="background:#eee;"><th>Όνομα</th><th>Email (Private)</th></tr>
+                    {rows}
+                </table>
+                <br>
+                <a href="/">Έξοδος</a>
+            </div>
+        '''
+    else:
+        # Αν ο κωδικός λείπει ή είναι λάθος, επιστρέφουμε 401 Unauthorized
+        return '''
+            <div style="text-align:center; margin-top:50px; font-family:sans-serif;">
+                <h1 style="color:darkred;">401 - Απαγορεύεται η πρόσβαση!</h1>
+                <p>Δεν έχετε το σωστό κλειδί ασφαλείας.</p>
+                <a href="/">Επιστροφή στην ασφάλεια</a>
+            </div>
+        ''', 401
 
 if __name__ == "__main__":
     app.run(debug=True)
