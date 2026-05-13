@@ -3,145 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stats Dashboard</title>
+    <title>Interactive Dashboard</title>
     <style>
-        :root {
-            --primary-blue: #2980b9;
-            --primary-orange: #e67e22;
-            --success-green: #2ecc71;
-            --bg-light: #f4f7f6;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Το background-color θα αλλάζει αν το progress είναι 100% */
-            background-color: {{ '#f1c40f' if progress >= 100 else '#f4f7f6' }};
-            transition: background-color 1s ease;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;
         }
-
         .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 350px;
-            border: 1px solid rgba(0,0,0,0.05);
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 350px; text-align: center;
         }
-
-        h1 { color: #333; margin-bottom: 5px; }
-        .subtitle { color: #888; font-size: 0.9em; margin-bottom: 25px; }
-
-        /* Progress Bar Styling */
         .progress-container {
-            background: #eee;
-            border-radius: 10px;
-            height: 15px;
-            width: 100%;
-            margin: 20px 0 10px 0;
-            overflow: hidden;
-            border: 1px solid #ddd;
+            background: #eee; border-radius: 10px; height: 12px; margin: 15px 0; overflow: hidden;
         }
-
         .progress-bar {
-            background: var(--success-green);
-            height: 100%;
-            width: {{ progress }}%;
-            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #2ecc71; height: 100%; width: {{ progress }}%; transition: 0.5s;
         }
-
-        .goal-text {
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 30px;
+        .badge-container {
+            margin: 20px 0; display: flex; flex-direction: column; gap: 5px;
         }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
+        .badge {
+            background: #e8f5e9; color: #2e7d32; padding: 5px; border-radius: 5px; font-size: 12px; font-weight: bold;
         }
-
-        .stat-item {
-            flex: 1;
-            padding: 15px;
-            border-radius: 15px;
-            background: #fafafa;
-            border: 1px solid #eee;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
-        }
-
+        .btn-group { display: flex; justify-content: space-around; margin-top: 20px; }
         .btn {
-            text-decoration: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.9em;
-            display: block;
-            transition: all 0.2s;
+            text-decoration: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; transition: 0.3s;
         }
-
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn:active { transform: translateY(0); }
-
-        .btn-like { background-color: var(--primary-blue); }
-        .btn-coffee { background-color: var(--primary-orange); }
-
-        .footer {
-            margin-top: 35px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .reset-link {
-            color: #e74c3c;
-            font-size: 0.75em;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-
-        .reset-link:hover { opacity: 1; text-decoration: underline; }
+        .btn-like { background: #3498db; }
+        .btn-coffee { background: #e67e22; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>📊 Dashboard</h1>
-        <p class="subtitle">Live Stats Project</p>
-
+        <h2>🚀 My Project Status</h2>
+        
         <div class="progress-container">
             <div class="progress-bar"></div>
         </div>
-        <p class="goal-text">Στόχος: <strong>{{ likes }}</strong> / {{ goal }} Likes</p>
+        <p style="font-size: 13px; color: #666;">Στόχος Likes: {{ likes }}/{{ goal }}</p>
 
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-value">{{ likes }}</span>
+        <div class="badge-container">
+            {% for b in badges %}
+                <div class="badge">{{ b }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="btn-group">
+            <div>
+                <div style="font-size: 24px;">{{ likes }}</div>
                 <a href="/action/likes" class="btn btn-like">Like 👍</a>
             </div>
-            <div class="stat-item">
-                <span class="stat-value">{{ coffee }}</span>
+            <div>
+                <div style="font-size: 24px;">{{ coffee }}</div>
                 <a href="/action/coffee_cups" class="btn btn-coffee">Coffee ☕</a>
             </div>
         </div>
 
-        <div class="footer">
-            <p style="font-size: 0.9em;">Συνολικές ενέργειες: <strong>{{ likes + coffee }}</strong></p>
-            <a href="/reset" class="reset-link">Επαναφορά όλων των δεδομένων</a>
-        </div>
+        <hr style="margin-top: 30px; border: 0; border-top: 1px solid #eee;">
+        <p>Σύνολο Αλληλεπιδράσεων: <strong>{{ likes + coffee }}</strong></p>
+        
+        {% if (likes + coffee) == 0 %}
+            <p style="color: #e74c3c; font-size: 12px;">Κάνε το πρώτο κλικ!</p>
+        {% endif %}
+
+        <a href="/reset" style="font-size: 11px; color: #999; text-decoration: none;">Επαναφορά</a>
     </div>
 
 </body>
