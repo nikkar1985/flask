@@ -1,53 +1,51 @@
-from flask import Flask, request, abort
+from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
 
-# "Βάση" με κρυφά στοιχεία (emails)
-USERS = {
-    "nikos": {"job": "Developer", "email": "nikos@example.com"},
-    "maria": {"job": "Designer", "email": "maria@example.com"}
-}
-
-ADMIN_PASSWORD = "secret123"  # Ο "κωδικός" μας
+# Μια λίστα που θα αποθηκεύει τα μηνύματα (θα χάνονται αν γίνει restart ο server στο Render)
+messages = [
+    {"user": "Admin", "text": "Καλωσήρθατε στο Guestbook μου!"}
+]
 
 @app.route('/')
-def home():
-    return '''
-        <h1>Καλωσήρθατε!</h1>
-        <p><a href="/admin?key=secret123">Είσοδος Admin (με κωδικό)</a></p>
-        <p><a href="/admin">Είσοδος Admin (χωρίς κωδικό - Error)</a></p>
-    '''
-
-@app.route('/admin')
-def admin_panel():
-    # Παίρνουμε το 'key' από το URL: /admin?key=...
-    user_key = request.args.get('key')
-    
-    if user_key == ADMIN_PASSWORD:
-        # Αν ο κωδικός είναι σωστός, χτίζουμε τον πίνακα των emails
-        rows = "".join([f"<tr><td>{name}</td><td>{info['email']}</td></tr>" for name, info in USERS.items()])
-        
-        return f'''
-            <div style="font-family:sans-serif; padding:20px; border:5px solid red;">
-                <h1 style="color:red;">Admin Dashboard</h1>
-                <p>Είσαι συνδεδεμένος ως Διαχειριστής.</p>
-                <table border="1" style="width:100%; text-align:left;">
-                    <tr style="background:#eee;"><th>Όνομα</th><th>Email (Private)</th></tr>
-                    {rows}
-                </table>
-                <br>
-                <a href="/">Έξοδος</a>
+def index():
+    # Δημιουργούμε το HTML για τα μηνύματα
+    msg_html = ""
+    for m in messages:
+        msg_html += f'''
+            <div style="border-bottom:1px solid #eee; padding:10px;">
+                <b>{m['user']}:</b> {m['text']}
             </div>
         '''
-    else:
-        # Αν ο κωδικός λείπει ή είναι λάθος, επιστρέφουμε 401 Unauthorized
-        return '''
-            <div style="text-align:center; margin-top:50px; font-family:sans-serif;">
-                <h1 style="color:darkred;">401 - Απαγορεύεται η πρόσβαση!</h1>
-                <p>Δεν έχετε το σωστό κλειδί ασφαλείας.</p>
-                <a href="/">Επιστροφή στην ασφάλεια</a>
-            </div>
-        ''', 401
+
+    return f'''
+    <div style="font-family:sans-serif; max-width:500px; margin:50px auto; border:1px solid #ccc; padding:20px; border-radius:10px;">
+        <h2>Βιβλίο Επισκεπτών ✍️</h2>
+        
+        <form action="/add_message" method="POST" style="margin-bottom:20px; background:#f9f9f9; padding:15px; border-radius:5px;">
+            <input type="text" name="username" placeholder="Το όνομά σου" required style="width:90%; padding:8px; margin-bottom:10px;"><br>
+            <textarea name="content" placeholder="Γράψε ένα μήνυμα..." required style="width:90%; padding:8px; height:60px;"></textarea><br>
+            <button type="submit" style="background: #28a745; color:white; border:none; padding:10px 20px; cursor:pointer; border-radius:3px;">Αποστολή</button>
+        </form>
+
+        <div style="background:white;">
+            {msg_html}
+        </div>
+    </div>
+    '''
+
+@app.route('/add_message', methods=['POST'])
+def add_message():
+    # Παίρνουμε τα δεδομένα από τη φόρμα
+    user = request.form.get('username')
+    text = request.form.get('content')
+    
+    if user and text:
+        # Προσθήκη στην αρχή της λίστας
+        messages.insert(0, {"user": user, "text": text})
+    
+    # Μετά την υποβολή, ξαναγύρνα στην αρχική σελίδα
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(debug=True)
