@@ -1,24 +1,46 @@
 from flask import Flask
+import datetime
 
 app = Flask(__name__)
 
-# Η "βάση δεδομένων" μας
+# Εμπλουτισμένη "Βάση Δεδομένων"
 USERS = {
-    "nikos": {"job": "Developer", "bio": "Λατρεύει την Python και τον καφέ.", "color": "#3498db"},
-    "maria": {"job": "Designer", "bio": "Φτιάχνει τα πιο ωραία UI στον κόσμο.", "color": "#e74c3c"},
-    "george": {"job": "Data Scientist", "bio": "Αναλύει δεδομένα με τις ώρες.", "color": "#2ecc71"}
+    "nikos": {
+        "job": "Backend Developer",
+        "skills": ["Python", "Flask", "PostgreSQL"],
+        "joined": "2023-05-12",
+        "color": "#3498db"
+    },
+    "maria": {
+        "job": "UI/UX Designer",
+        "skills": ["Figma", "CSS", "Adobe XD"],
+        "joined": "2023-08-20",
+        "color": "#e74c3c"
+    }
 }
 
 @app.route('/')
 def home():
-    links = "".join([f'<li><a href="/user/{name}">{name.capitalize()}</a></li>' for name in USERS])
+    # Δημιουργούμε δυναμικά τα κουμπιά για κάθε χρήστη
+    user_buttons = ""
+    for name in USERS:
+        user_buttons += f'''
+            <a href="/user/{name}" style="
+                text-decoration:none;
+                color:white;
+                background:{USERS[name]['color']};
+                padding:10px 20px;
+                border-radius:5px;
+                margin:5px;
+                display:inline-block;
+            ">{name.capitalize()}</a>
+        '''
+   
     return f'''
-    <div style="text-align:center; font-family:sans-serif; margin-top:50px;">
-        <h1>Λίστα Μελών</h1>
-        <ul style="list-style:none; padding:0; font-size:20px;">
-            {links}
-        </ul>
-        <p style="color:gray;">Κλίκαρε ένα όνομα για να δεις το προφίλ!</p>
+    <div style="text-align:center; font-family:sans-serif; margin-top:100px;">
+        <h1>Πλατφόρμα Μελών v2.0</h1>
+        <p>Επιλέξτε ένα μέλος για να δείτε τις δεξιότητές του:</p>
+        <div style="margin-top:30px;">{user_buttons}</div>
     </div>
     '''
 
@@ -26,39 +48,33 @@ def home():
 def show_profile(username):
     user = username.lower()
    
-    # Έλεγχος αν ο χρήστης υπάρχει στη "βάση" μας
     if user in USERS:
         data = USERS[user]
+        # Μετατρέπουμε τη λίστα των skills σε HTML bullets
+        skills_html = "".join([f"<li>{s}</li>" for s in data['skills']])
         avatar_url = f"https://robohash.org/{user}.png?set=set1"
        
         return f'''
-        <div style="
-            border: 4px solid {data['color']};
-            padding: 30px;
-            border-radius: 20px;
-            text-align:center;
-            font-family: sans-serif;
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #f9f9f9;
-        ">
-            <img src="{avatar_url}" style="width:120px; border-radius:50%; border: 2px solid #ccc;">
-            <h1 style="color:{data['color']}; text-transform:capitalize;">{user}</h1>
-            <h3 style="color:#555;">{data['job']}</h3>
-            <p style="line-height:1.6; color:#666;">{data['bio']}</p>
-            <hr>
-            <a href="/" style="text-decoration:none; color:#333;"><b>← Πίσω στη λίστα</b></a>
+        <div style="max-width:500px; margin:50px auto; font-family:sans-serif; border:1px solid #ddd; border-radius:15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            <div style="background:{data['color']}; height:100px;"></div>
+            <div style="text-align:center; margin-top:-60px;">
+                <img src="{avatar_url}" style="width:120px; background:white; border-radius:50%; border:5px solid white;">
+            </div>
+            <div style="padding:20px; text-align:center;">
+                <h1 style="margin:0; text-transform:capitalize;">{user}</h1>
+                <p style="color:gray; font-weight:bold;">{data['job']}</p>
+                <p style="font-size:12px; color:#aaa;">Μέλος από: {data['joined']}</p>
+                <hr>
+                <div style="text-align:left; display:inline-block;">
+                    <h3>Skills:</h3>
+                    <ul>{skills_html}</ul>
+                </div>
+                <br><br>
+                <a href="/" style="color:{data['color']}; text-decoration:none;"><b>← Επιστροφή</b></a>
+            </div>
         </div>
         '''
-    else:
-        # Σελίδα σφάλματος αν δεν βρεθεί ο χρήστης
-        return f'''
-        <div style="text-align:center; font-family:sans-serif; margin-top:100px;">
-            <h1 style="color:red;">404 - Ο χρήστης δεν βρέθηκε!</h1>
-            <p>Το όνομα <b>{username}</b> δεν υπάρχει στην παρέα μας.</p>
-            <a href="/">Επιστροφή στην αρχική</a>
-        </div>
-        ''', 404
+    return "Ο χρήστης δεν βρέθηκε", 404
 
 if __name__ == "__main__":
     app.run(debug=True)
