@@ -1,65 +1,55 @@
-from flask import Flask
-from datetime import datetime
+from flask import Flask, request
 
 app = Flask(__name__)
 
-USERS = {
-    "nikos": {"job": "Backend Developer", "color": "#3498db"},
-    "maria": {"job": "UI/UX Designer", "color": "#e74c3c"}
-}
-
-def get_greeting():
-    # Παίρνουμε την τρέχουσα ώρα
-    hour = datetime.now().hour
-    if hour < 12:
-        return "Καλημέρα"
-    elif hour < 18:
-        return "Καλησπέρα"
-    else:
-        return "Καληνύχτα"
+# Μια πιο γεμάτη "βάση" για να έχει νόημα το φίλτρο
+USERS = [
+    {"name": "nikos", "job": "developer", "color": "#3498db"},
+    {"name": "maria", "job": "designer", "color": "#e74c3c"},
+    {"name": "eleni", "job": "developer", "color": "#2ecc71"},
+    {"name": "kostas", "job": "manager", "color": "#f1c40f"},
+]
 
 @app.route('/')
 def home():
-    # Ημερομηνία σε όμορφη μορφή (π.χ. 13/05/2026)
-    now = datetime.now()
-    current_time = now.strftime("%d/%m/%Y %H:%M:%S")
-    greeting = get_greeting()
+    # Παίρνουμε το φίλτρο από το URL, π.χ. /?job=developer
+    job_filter = request.args.get('job')
    
-    user_links = "".join([f'<li><a href="/user/{name}">{name.capitalize()}</a></li>' for name in USERS])
-   
+    # Φιλτράρουμε τη λίστα αν υπάρχει το filter, αλλιώς τους δείχνουμε όλους
+    if job_filter:
+        filtered_users = [u for u in USERS if u['job'] == job_filter.lower()]
+        title = f"Μέλη με επάγγελμα: {job_filter}"
+    else:
+        filtered_users = USERS
+        title = "Όλα τα Μέλη"
+
+    # Δημιουργία των links
+    user_html = ""
+    for u in filtered_users:
+        user_html += f'''
+            <div style="border-left: 5px solid {u['color']}; margin: 10px; padding: 10px; background: #f4f4f4;">
+                <strong>{u['name'].capitalize()}</strong> - {u['job']}
+                <a href="/user/{u['name']}">Προφίλ</a>
+            </div>
+        '''
+
     return f'''
-    <div style="text-align:center; font-family:sans-serif; margin-top:50px; color:#2c3e50;">
-        <div style="background:#ecf0f1; padding:10px; border-radius:10px; display:inline-block;">
-            <strong>{greeting}!</strong> Η ώρα είναι: {current_time}
-        </div>
-       
-        <h1 style="margin-top:30px;">Πλατφόρμα Μελών</h1>
-        <p>Επιλέξτε ένα προφίλ:</p>
-        <ul style="list-style:none; padding:0; font-size:22px;">
-            {user_links}
-        </ul>
-       
-        <footer style="margin-top:50px; font-size:12px; color:gray;">
-            Server status: Online | Last refresh: {current_time}
-        </footer>
+    <div style="font-family:sans-serif; max-width:600px; margin:auto;">
+        <h1>{title}</h1>
+        <p>Φιλτράρισμα:
+            <a href="/">Όλοι</a> |
+            <a href="/?job=developer">Developers</a> |
+            <a href="/?job=designer">Designers</a>
+        </p>
+        <hr>
+        {user_html if user_html else "<p>Δεν βρέθηκαν μέλη.</p>"}
     </div>
     '''
 
 @app.route('/user/<username>')
-def show_profile(username):
-    user = username.lower()
-    if user in USERS:
-        data = USERS[user]
-        return f'''
-        <div style="border:10px solid {data['color']}; padding:40px; text-align:center; font-family:sans-serif;">
-            <h1>{user.capitalize()}</h1>
-            <h2>{data['job']}</h2>
-            <hr>
-            <p>Η σελίδα δημιουργήθηκε στις: {datetime.now().strftime("%H:%M:%S")}</p>
-            <a href="/">Επιστροφή</a>
-        </div>
-        '''
-    return "User not found", 404
+def profile(username):
+    # Απλό προφίλ για το παράδειγμα
+    return f"<h1>Προφίλ του χρήστη: {username}</h1><a href='/'>Πίσω</a>"
 
 if __name__ == "__main__":
     app.run(debug=True)
