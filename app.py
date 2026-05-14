@@ -1,11 +1,16 @@
-import random
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html')
+    user_name = None
+    if request.method == 'POST':
+        user_name = request.form.get('name')
+
+    now = datetime.now().strftime("%H:%M:%S")
+    return render_template('index.html', time=now, name=user_name)
     
 
 if __name__ == '__main__':
