@@ -65,7 +65,7 @@ def take_action(type):
 def reset():
     stats["likes"] = 0
     stats["coffee_cups"] = 0
-        stats["donations"] = 0
+    stats["donations"] = 0
 
     return redirect(url_for('home'))
 
