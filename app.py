@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 # Η "βάση δεδομένων" μας
 USERS = {
-    "nikos": {"job": "Developer", "omada": "Panathinaikos", "color": "#3498db"},
-    "maria": {"job": "Teacher", "omada": "AEK", "color": "#e74c3c"},
-    "george": {"job": "Football Player", "omada": "Iraklis", "color": "#2ecc71"}
+    "nikos": {"job": "Developer", "omada": "Panathinaikos", "color": "#3498db", "city" : "Kalamata"},
+    "maria": {"job": "Teacher", "omada": "AEK", "color": "#e74c3c", "city":"Athens"},
+    "george": {"job": "Football Player", "omada": "Iraklis", "color": "#2ecc71", "city:":"Rethymno"}
 }
 
 @app.route('/')
@@ -46,6 +46,7 @@ def show_profile(username):
             <h1 style="color:{data['color']}; text-transform:capitalize;">{user}</h1>
             <h3 style="color:#555;">{data['job']}</h3>
             <p style="line-height:1.6; color:#666;">{data['omada']}</p>
+             <p style="line-height:1.4; color:#222;">{data['city']}</p>
 
             <hr>
             <a href="/" style="text-decoration:none; color:#333;"><b>← Πίσω στη λίστα</b></a>
