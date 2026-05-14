@@ -3,95 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Wordle</title>
+    <title>URL Shortener</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #121213; color: white;
+            background: linear-gradient(135deg, #111, #222);
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0;
+            min-height: 100vh; margin: 0; color: #fff;
         }
-        .container { text-align: center; width: 350px; }
-        h1 { color: #f8f9fa; letter-spacing: 2px; margin-bottom: 20px; }
-        
-        /* Το Grid του Wordle */
-        .grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; }
-        .row { display: flex; justify-content: center; gap: 5px; }
-        .tile {
-            width: 50px; height: 50px; border: 2px solid #3a3a3c;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; text-transform: uppercase;
-            border-radius: 5px;
+        .card {
+            background: #1e1e1e; padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 400px; text-align: center;
+            border: 1px solid #333;
         }
-        
-        /* Χρώματα για τις καταστάσεις */
-        .correct { background-color: #538d4e; border-color: #538d4e; }
-        .present { background-color: #b59f3b; border-color: #b59f3b; }
-        .absent { background-color: #3a3a3c; border-color: #3a3a3c; }
-
-        input[type="text"] {
-            width: 60%; padding: 10px; border: 2px solid #3a3a3c; background: #121213;
-            color: white; font-size: 18px; text-align: center; border-radius: 5px; outline: none;
-            text-transform: uppercase;
+        h2 { color: #00cec9; margin-bottom: 25px; }
+        input[type="url"] {
+            width: 90%; padding: 12px; border: 2px solid #333; background: #2d2d2d;
+            border-radius: 10px; font-size: 14px; outline: none; color: white; margin-bottom: 15px;
         }
-        input[type="text"]:focus { border-color: #538d4e; }
+        input[type="url"]:focus { border-color: #00cec9; }
         button {
-            padding: 11px 15px; background: #538d4e; color: white; border: none;
-            font-weight: bold; border-radius: 5px; cursor: pointer; font-size: 16px;
+            width: 96%; padding: 12px; border: none; background: #00cec9;
+            color: #111; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
         }
-        button:hover { background: #43733f; }
-        
-        .message { margin-top: 20px; font-size: 18px; font-weight: bold; }
-        .error { color: #e74c3c; font-size: 14px; margin-bottom: 10px; }
-        .btn-reset {
-            display: inline-block; margin-top: 15px; padding: 8px 15px;
-            background: #3a3a3c; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;
+        button:hover { background: #00b5b5; }
+        .result-box {
+            margin-top: 30px; padding: 15px; background: #2d2d2d; border-radius: 10px;
+            border: 1px dashed #00cec9;
         }
-        .btn-reset:hover { background: #4a4a4c; }
+        .result-box a { color: #00cec9; font-weight: bold; font-size: 18px; text-decoration: none; }
+        .result-box a:hover { text-decoration: underline; }
+        .error { color: #ff7675; margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>WORDLE</h1>
-
-        <div class="grid">
-            {% for attempt in attempts %}
-                <div class="row">
-                    {% for char, status in attempt %}
-                        <div class="tile {{ status }}">{{ char }}</div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-            
-            {% for _ in range(6 - attempts|length) %}
-                <div class="row">
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                </div>
-            {% endfor %}
-        </div>
+    <div class="card">
+        <h2>🔗 URL Shortener</h2>
+        
+        <form method="POST">
+            <input type="url" name="long_url" placeholder="Επικόλληση μεγάλου συνδέσμου εδώ..." required>
+            <button type="submit">Μίκρυνέ το!</button>
+        </form>
 
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
 
-        {% if not game_over %}
-            <form method="POST">
-                <input type="text" name="guess" maxlength="5" placeholder="ΛΕΞΗ" autofocus required>
-                <button type="submit">OK</button>
-            </form>
-        {% else %}
-            <div class="message">
-                {% if won %}
-                    <p style="color: #538d4e;">🏆 Συγχαρητήρια! Το βρήκες!</p>
-                {% else %}
-                    <p style="color: #e74c3c;">❌ Έχασες! Η λέξη ήταν: {{ secret_word }}</p>
-                {% endif %}
-                <a href="/reset" class="btn-reset">Παίξε Ξανά</a>
+        {% if short_url %}
+            <div class="result-box">
+                <p style="margin: 0 0 10px 0; color: #aaa; font-size: 14px;">Έτοιμο το μικρό σου link:</p>
+                <a href="{{ short_url }}" target="_blank">{{ short_url }}</a>
             </div>
         {% endif %}
     </div>
