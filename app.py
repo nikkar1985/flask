@@ -25,6 +25,7 @@ def profile(onoma,epaggelma):
         <p> {epaggelma} </p>
         <div> Active Profile </div>
         <a href="/"> Επιστροφή </a>
+        </div>
         
         '''
 
