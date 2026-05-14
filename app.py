@@ -43,14 +43,15 @@ def home():
 def take_action(type):
     if type in stats:
         stats[type]+=1
-        return redirect(url_for('home'))
+    
+    return redirect(url_for('home'))
 
 
 @app.route('reset')
 def reset():
     stats["likes"]=0
     stats["coffee_cups"]=0
-            return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 
 
