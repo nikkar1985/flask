@@ -31,10 +31,11 @@ def home():
                 <h2 style="margin:0;">☕</h2>
                 <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["coffee_cups"]}</p>
                 <a href="/action/coffee_cups" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Add Coffee</a>
-            </div> <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
+            </div> 
+            <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
                 <h2 style="margin:0;">☕</h2>
                 <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["donations"]}</p>
-                <a href="/action/donations" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Add Coffee</a>
+                <a href="/action/donations" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Donations</a>
             </div>
 
             
@@ -64,6 +65,8 @@ def take_action(type):
 def reset():
     stats["likes"] = 0
     stats["coffee_cups"] = 0
+        stats["donations"] = 0
+
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
