@@ -9,7 +9,7 @@ stats = {
 }
 
 @app.route('/')
-def dashboard():
+def home():
     total_actions = stats["likes"] + stats["coffee_cups"]
    
     bg_color = "#f1c40f" if stats["likes"] >= 10 else "#ffffff"
