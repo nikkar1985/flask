@@ -1,13 +1,23 @@
-from flask import Flask, redirect, url_for
+import random
+from flask import Flask, redirect, render_template, request, session, redirect, url_for
 
 app = Flask(__name__)
 
-# Η "μνήμη" της εφαρμογής μας
-stats = {
-    "likes": 0,
-    "coffee_cups": 0,
-    "donations":0
-}
+app.secret.key = "wordle_secret_key_999"
+
+WORDS = [ "FLASK", "SMART", " WORLD", "LOGIC" , "CYBER"]
+
+def check_guess(guess,secret):
+    result = []
+    for i in range(5)
+    char = guess[i]
+    if char == secret[i]
+
+result.append((char, ' correct'))
+elif chat in secret: result.append((char, 'present'))
+else: result.append((char, 'absent'))
+
+return result
 
 @app.route('/')
 def home():
