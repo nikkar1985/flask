@@ -43,5 +43,12 @@ def home():
     '''
 
 
+
+@app.route('/user/<username>')
+def profile(username):
+    return f "<h1> Προφίλ του χρήστη : {username} </h1> <a href="/"> Πίσω </a>"
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
