@@ -5,12 +5,13 @@ app = Flask(__name__)
 # Η "μνήμη" της εφαρμογής μας
 stats = {
     "likes": 0,
-    "coffee_cups": 0
+    "coffee_cups": 0,
+    "donations":0
 }
 
 @app.route('/')
 def home():
-    total_actions = stats["likes"] + stats["coffee_cups"]
+    total_actions = stats["likes"] + stats["coffee_cups"] + stats["donations"]
    
     bg_color = "#f1c40f" if stats["likes"] >= 10 else "#ffffff"
 
@@ -30,12 +31,20 @@ def home():
                 <h2 style="margin:0;">☕</h2>
                 <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["coffee_cups"]}</p>
                 <a href="/action/coffee_cups" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Add Coffee</a>
+            </div> <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
+                <h2 style="margin:0;">☕</h2>
+                <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["donations"]}</p>
+                <a href="/action/donations" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Add Coffee</a>
             </div>
+
+            
         </div>
 
         <div style="margin-top:40px; padding:20px; background:rgba(255,255,255,0.8); display:inline-block; border-radius:10px;">   
                         <p><b>Συνολικά Likes :</b> {stats["likes"]} ενέργειες</p>
                         <p><b>Συνολικά Coffee Cups :</b> {stats["coffee_cups"]} ενέργειες</p>
+                                                <p><b>Συνολικά Donations :</b> {stats["donations"]} ενέργειες</p>
+
 
             <p><b>Συνολική Αλληλεπίδραση:</b> {total_actions} ενέργειες</p>
             <p><small>Κάνε refresh για να δεις τις αλλαγές!</small></p>
