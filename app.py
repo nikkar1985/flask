@@ -8,10 +8,11 @@ def home():
     user_name = None
     if request.method == 'POST':
         user_name = request.form.get('name')
-
-    now = datetime.now().strftime("%H:%M:%S")
-    return render_template('index.html', time=now, name=user_name)
     
+    # Παίρνουμε την τρέχουσα ώρα
+    now = datetime.now().strftime("%H:%M:%S")
+    
+    return render_template('index.html', time=now, name=user_name)
 
 if __name__ == '__main__':
     app.run(debug=True)
