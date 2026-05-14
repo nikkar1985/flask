@@ -18,7 +18,7 @@ def index():
 def profile(onoma,epaggelma):
     
         avatar_url = f"https://robohash.org/{onoma}.png?set=set4"
-    return '''
+    return f'''
         <div>
         <img src="{avatar_url}" alt="Avatar">
         <h1> {onoma}</h1>
