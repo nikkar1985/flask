@@ -34,8 +34,8 @@ def home():
         </div>
 
         <div style="margin-top:40px; padding:20px; background:rgba(255,255,255,0.8); display:inline-block; border-radius:10px;">   
-                        <p><b>Συνολικά Likes :</b> {likes} ενέργειες</p>
-                        <p><b>Συνολικά Coffee Cups :</b> {coffee_cups} ενέργειες</p>
+                        <p><b>Συνολικά Likes :</b> {stats["likes"]}< ενέργειες</p>
+                        <p><b>Συνολικά Coffee Cups :</b> {stats["coffee_cups"]}< ενέργειες</p>
 
             <p><b>Συνολική Αλληλεπίδραση:</b> {total_actions} ενέργειες</p>
             <p><small>Κάνε refresh για να δεις τις αλλαγές!</small></p>
