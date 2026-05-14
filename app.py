@@ -16,7 +16,8 @@ def index():
 
 @app.route('/<onoma>/<epaggelma>')
 def profile(onoma,epaggelma):
-    avatar_url = f"https://robohash.org/{onoma}.png?set=set=4"
+    
+        avatar_url = f"https://robohash.org/{onoma}.png?set=set4"
     return '''
         <div>
         <img src="{avatar_url}" alt="Avatar">
