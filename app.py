@@ -39,8 +39,8 @@ def home():
         <p>Φιλτράρισμα:
             <a href="/">Όλοι</a> |
             <a href="/?job=developer">Developers</a> |
-            <a href="/?job=designer">Designers</a>
-            <a href="/?job=manager">Manager</a>
+            <a href="/?job=designer">Designers</a> |
+            <a href="/?job=manager">Manager</a> |
             <a href="/?job=teacher">Teacher</a>
         </p>
         <hr>
