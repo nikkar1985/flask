@@ -46,7 +46,7 @@ def home():
 
 @app.route('/user/<username>')
 def profile(username):
-    return f "<h1> Προφίλ του χρήστη : {username} </h1> <a href="/"> Πίσω </a>"
+    return f"<h1>Προφίλ του χρήστη: {username}</h1><a href='/'>Πίσω</a>"
 
 
 
