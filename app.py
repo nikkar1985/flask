@@ -7,6 +7,10 @@ USERS = [
     {"name": "maria", "job": "designer", "color": "#e74c3c"},
     {"name": "eleni", "job": "developer", "color": "#2ecc71"},
     {"name": "kostas", "job": "manager", "color": "#f1c40f"},
+    {"name": "eirini", "job": "manager", "color": "#f1d333"},
+    {"name": "giannis", "job": "teacher", "color": "#d1f403"},
+    {"name": "panagiotis", "job": "teacher", "color": "#123456"}
+
 ]
 
 @app.route('/')
@@ -36,6 +40,8 @@ def home():
             <a href="/">Όλοι</a> |
             <a href="/?job=developer">Developers</a> |
             <a href="/?job=designer">Designers</a>
+            <a href="/?job=manager">Manager</a>
+            <a href="/?job=teacher">Teacher</a>
         </p>
         <hr>
         {user_html if user_html else "<p>Δεν βρέθηκαν μέλη.</p>"}
