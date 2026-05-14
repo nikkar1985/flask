@@ -46,6 +46,8 @@ def show_profile(username):
             <h1 style="color:{data['color']}; text-transform:capitalize;">{user}</h1>
             <h3 style="color:#555;">{data['job']}</h3>
             <p style="line-height:1.6; color:#666;">{data['omada']}</p>
+                        <p style="line-height:1.6; color:#666;">{data['color']}</p>
+
             <hr>
             <a href="/" style="text-decoration:none; color:#333;"><b>← Πίσω στη λίστα</b></a>
         </div>
