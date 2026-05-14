@@ -1,83 +1,65 @@
 import random
-from flask import Flask, redirect, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = "wordle_secret_key_999"
 
-app.secret.key = "wordle_secret_key_999"
+WORDS = ["FLASK", "SMART", "WORLD", "SPACE", "CLOUD", "MOUSE", "LOGIC", "CYBER"]
 
-WORDS = [ "FLASK", "SMART", " WORLD", "LOGIC" , "CYBER"]
-
-def check_guess(guess,secret):
+def check_guess(guess, secret):
     result = []
-    for i in range(5)
-    char = guess[i]
-    if char == secret[i]
+    for i in range(5):
+        char = guess[i]
+        if char == secret[i]:
+            result.append((char, 'correct'))
+        elif char in secret:
+            result.append((char, 'present'))
+        else:
+            result.append((char, 'absent'))
+    return result
 
-result.append((char, ' correct'))
-elif chat in secret: result.append((char, 'present'))
-else: result.append((char, 'absent'))
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if 'secret_word' not in session:
+        session['secret_word'] = random.choice(WORDS)
+        session['attempts'] = []
+        session['game_over'] = False
+        session['won'] = False
 
-return result
+    error = None
 
-@app.route('/')
-def home():
-    total_actions = stats["likes"] + stats["coffee_cups"] + stats["donations"]
-   
-    bg_color = "#f1c40f" if stats["likes"] >= 10 else "#ffffff"
+    if request.method == 'POST' and not session['game_over']:
+        guess = request.form.get('guess', '').upper().strip()
 
-    return f'''
-    <div style="font-family:sans-serif; text-align:center; padding:50px; background-color:{bg_color}; min-height:100vh;">
-        <h1>📊 Live Stats Dashboard</h1>
-        <p>Δείξε την υποστήριξή σου στον Developer!</p>
-       
-        <div style="display:flex; justify-content:center; gap:20px; margin-top:30px;">
-            <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
-                <h2 style="margin:0;">👍</h2>
-                <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["likes"]}</p>
-                <a href="/action/likes" style="text-decoration:none; background:#2980b9; color:white; padding:5px 15px; border-radius:5px;">Like!</a>
-            </div>
-
-            <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
-                <h2 style="margin:0;">☕</h2>
-                <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["coffee_cups"]}</p>
-                <a href="/action/coffee_cups" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Add Coffee</a>
-            </div> 
-            <div style="border:2px solid #333; padding:20px; border-radius:10px; background:white; width:150px;">
-                <h2 style="margin:0;">☕</h2>
-                <p style="font-size:30px; font-weight:bold; margin:10px 0;">{stats["donations"]}</p>
-                <a href="/action/donations" style="text-decoration:none; background:#e67e22; color:white; padding:5px 15px; border-radius:5px;">Donations</a>
-            </div>
-
+        if len(guess) != 5 or not guess.isalpha():
+            error = "Η λέξη πρέπει να έχει ακριβώς 5 γράμματα!"
+        else:
+            checked = check_guess(guess, session['secret_word'])
             
-        </div>
+            attempts = session['attempts']
+            attempts.append(checked)
+            session['attempts'] = attempts
 
-        <div style="margin-top:40px; padding:20px; background:rgba(255,255,255,0.8); display:inline-block; border-radius:10px;">   
-                        <p><b>Συνολικά Likes :</b> {stats["likes"]} ενέργειες</p>
-                        <p><b>Συνολικά Coffee Cups :</b> {stats["coffee_cups"]} ενέργειες</p>
-                                                <p><b>Συνολικά Donations :</b> {stats["donations"]} ενέργειες</p>
+            if guess == session['secret_word']:
+                session['game_over'] = True
+                session['won'] = True
+            elif len(session['attempts']) >= 6:
+                session['game_over'] = True
 
-
-            <p><b>Συνολική Αλληλεπίδραση:</b> {total_actions} ενέργειες</p>
-            <p><small>Κάνε refresh για να δεις τις αλλαγές!</small></p>
-        </div>
-        <br><br>
-        <a href="/reset" style="color:red; font-size:12px;">Reset Stats</a>
-    </div>
-    '''
-
-@app.route('/action/<type>')
-def take_action(type):
-    if type in stats:
-        stats[type] += 1
-    return redirect(url_for('home'))
+    return render_template('index.html', 
+                           attempts=session['attempts'], 
+                           game_over=session['game_over'], 
+                           won=session['won'], 
+                           secret_word=session['secret_word'],
+                           error=error)
 
 @app.route('/reset')
 def reset():
-    stats["likes"] = 0
-    stats["coffee_cups"] = 0
-    stats["donations"] = 0
+    session.pop('secret_word', None)
+    session.pop('attempts', None)
+    session.pop('game_over', None)
+    session.pop('won', None)
+    return redirect(url_for('index'))
 
-    return redirect(url_for('home'))
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
